@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
 import styled from 'styled-components';
 
-const OpenModalButton = styled.button`
+const OpenButton = styled.button`
 
 `;
 
@@ -11,14 +11,82 @@ const Backdrop = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: -1;
+  z-index: 1040;
   background-color: #000;
   opacity: 0.5;
 `;
 
-const ModalContent = styled.div`
-  background-color: #ffffff;
-  z-index: 1041;
+const Content = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: .3rem;
+  outline: 0;
+  box-sizing: border-box;
+`;
+
+const Main = styled.div`
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  display: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  outline: 0;
+  transition: opacity .15s linear;
+`;
+
+const Dialog = styled.div`
+  max-width: 500px;
+  margin: 1.75rem auto;
+  position: relative;
+  width: auto;
+  pointer-events: none;
+  box-sizing: border-box;
+`;
+
+const Header = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  border-top-left-radius: calc(.3rem - 1px);
+  border-top-right-radius: calc(.3rem - 1px);
+  box-sizing: border-box;
+`;
+
+const Body = styled.div`
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+`;
+
+const Footer = styled.div`
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  padding: .75rem;
+  border-top: 1px solid #dee2e6;
+  border-bottom-right-radius: calc(.3rem - 1px);
+  border-bottom-left-radius: calc(.3rem - 1px);
+  box-sizing: border-box;
 `;
 
 const Modal = () => {
@@ -26,46 +94,46 @@ const Modal = () => {
   const modalContentRef = useRef();
 
   useEffect(() => {
-    const handleMouseDown = e => {
-      if (!(modalContentRef.current.contains(e.target)))
+    const handleClick = e => {
+      if (!(modalContentRef.current?.contains(e.target)))
         setIsOpen(false);
     }
     if(isOpen) {
-      window.addEventListener("mousedown", handleMouseDown);
+      window.addEventListener("click", handleClick);
     }
     return () => {
-      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("click", handleClick);
     };
   },[isOpen])
 
   return (
     <>
       {/* Trigger the modal with a button */}
-      <OpenModalButton type="button" onClick={() => setIsOpen(true)}>Open Modal</OpenModalButton>
+      <OpenButton type="button" onClick={() => setIsOpen(true)}>Open Modal</OpenButton>
 
       {isOpen &&
         <>
           {/* Modal */}
-          <div id={`modal-1`} className="modal fade" role="dialog" >
-            <div className="modal-dialog">
+          <Main id={`modal-1`} className="modal fade" role="dialog" style={{display: isOpen && 'block'}}>
+            <Dialog className="modal-dialog">
 
               {/* Modal content */}
-              <ModalContent ref={modalContentRef}>
-                <div className="modal-header">
+              <Content ref={modalContentRef}>
+                <Header>
                   <h4 className="modal-title">Edit Todo</h4>
-                  <button type="button" className="close" data-dismiss="modal" >&times;</button>
-                </div>
-                <div className="modal-body">
+                  <button type="button" className="close" onClick={() => setIsOpen(false)} >&times;</button>
+                </Header>
+                <Body>
                   <input type="text" className="form-control"  />
-                </div>
-                <div className="modal-footer">
+                </Body>
+                <Footer>
                   <button type="button" className="btn btn-warning" data-dismiss="modal" >Edit</button>
                   <button type="button" className="btn btn-default" data-dismiss="modal" onClick={() => setIsOpen(false)} >Close</button>
-                </div>
-              </ModalContent>
+                </Footer>
+              </Content>
 
-            </div>
-          </div>
+            </Dialog>
+          </Main>
           <Backdrop />
         </>
       }
