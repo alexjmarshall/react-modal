@@ -11,9 +11,14 @@ const Backdrop = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1040;
+  z-index: -1;
   background-color: #000;
   opacity: 0.5;
+`;
+
+const ModalContent = styled.div`
+  background-color: #ffffff;
+  z-index: 1041;
 `;
 
 const Modal = () => {
@@ -35,7 +40,7 @@ const Modal = () => {
             <div className="modal-dialog">
 
               {/* Modal content */}
-              <div className="modal-content">
+              <ModalContent>
                 <div className="modal-header">
                   <h4 className="modal-title">Edit Todo</h4>
                   <button type="button" className="close" data-dismiss="modal" >&times;</button>
@@ -47,7 +52,7 @@ const Modal = () => {
                   <button type="button" className="btn btn-warning" data-dismiss="modal" >Edit</button>
                   <button type="button" className="btn btn-default" data-dismiss="modal" >Close</button>
                 </div>
-              </div>
+              </ModalContent>
 
             </div>
           </div>
