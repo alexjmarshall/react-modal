@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import styled from 'styled-components';
 
 const OpenModalButton = styled.button`
@@ -23,15 +23,25 @@ const ModalContent = styled.div`
 
 const Modal = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const modalContentRef = useRef();
 
-  const toggleIsOpen = () => {
-    setIsOpen(!isOpen);
-  }
+  useEffect(() => {
+    const handleMouseDown = e => {
+      if (!(modalContentRef.current.contains(e.target)))
+        setIsOpen(false);
+    }
+    if(isOpen) {
+      window.addEventListener("mousedown", handleMouseDown);
+    }
+    return () => {
+      window.removeEventListener("mousedown", handleMouseDown);
+    };
+  },[isOpen])
 
   return (
     <>
       {/* Trigger the modal with a button */}
-      <OpenModalButton type="button" onClick={toggleIsOpen}>Open Modal</OpenModalButton>
+      <OpenModalButton type="button" onClick={() => setIsOpen(true)}>Open Modal</OpenModalButton>
 
       {isOpen &&
         <>
@@ -40,7 +50,7 @@ const Modal = () => {
             <div className="modal-dialog">
 
               {/* Modal content */}
-              <ModalContent>
+              <ModalContent ref={modalContentRef}>
                 <div className="modal-header">
                   <h4 className="modal-title">Edit Todo</h4>
                   <button type="button" className="close" data-dismiss="modal" >&times;</button>
@@ -50,7 +60,7 @@ const Modal = () => {
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-warning" data-dismiss="modal" >Edit</button>
-                  <button type="button" className="btn btn-default" data-dismiss="modal" >Close</button>
+                  <button type="button" className="btn btn-default" data-dismiss="modal" onClick={() => setIsOpen(false)} >Close</button>
                 </div>
               </ModalContent>
 
