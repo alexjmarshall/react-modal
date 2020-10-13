@@ -89,7 +89,15 @@ const Footer = styled.div`
   box-sizing: border-box;
 `;
 
-const Modal = () => {
+const Title = styled.h4`
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 1.5;
+`;
+
+const Modal = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const modalContentRef = useRef();
 
@@ -108,30 +116,24 @@ const Modal = () => {
 
   return (
     <>
-      {/* Trigger the modal with a button */}
       <OpenButton type="button" onClick={() => setIsOpen(true)}>Open Modal</OpenButton>
-
       {isOpen &&
         <>
-          {/* Modal */}
-          <Main id={`modal-1`} className="modal fade" role="dialog" style={{display: isOpen && 'block'}}>
-            <Dialog className="modal-dialog">
-
-              {/* Modal content */}
+          <Main id={`modal-1`} role="dialog" style={{display: isOpen && 'block'}}>
+            <Dialog>
               <Content ref={modalContentRef}>
                 <Header>
-                  <h4 className="modal-title">Edit Todo</h4>
-                  <button type="button" className="close" onClick={() => setIsOpen(false)} >&times;</button>
+                  <Title>Title</Title>
+                  <button type="button" onClick={() => setIsOpen(false)} >&times;</button>
                 </Header>
                 <Body>
-                  <input type="text" className="form-control"  />
+                  {props.children}
                 </Body>
                 <Footer>
-                  <button type="button" className="btn btn-warning" data-dismiss="modal" >Edit</button>
-                  <button type="button" className="btn btn-default" data-dismiss="modal" onClick={() => setIsOpen(false)} >Close</button>
+                  <button type="button" onClick={() => setIsOpen(false)} >Edit</button>
+                  <button type="button" onClick={() => setIsOpen(false)} >Close</button>
                 </Footer>
               </Content>
-
             </Dialog>
           </Main>
           <Backdrop />
