@@ -98,49 +98,42 @@ const Title = styled.h4`
 `;
 
 const Modal = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
   const modalContentRef = useRef();
 
   useEffect(() => {
     const handleClick = e => {
       if (!(modalContentRef.current?.contains(e.target)))
-        setIsOpen(false);
+        props.handleClose();
     }
-    if(isOpen) {
+    if(props.isOpen) {
       window.addEventListener("click", handleClick);
     }
     return () => {
       window.removeEventListener("click", handleClick);
     };
-  },[isOpen])
+  },[props])
 
   return (
     <>
-      <OpenButton type="button" onClick={() => setIsOpen(true)}>Open Modal</OpenButton>
-      {isOpen &&
-        <>
-          <Main id={`modal-1`} role="dialog" style={{display: isOpen && 'block'}}>
-            <Dialog>
-              <Content ref={modalContentRef}>
-                <Header>
-                  <Title>Title</Title>
-                  <button type="button" onClick={() => setIsOpen(false)} >&times;</button>
-                </Header>
-                <Body>
-                  {props.children}
-                </Body>
-                <Footer>
-                  <button type="button" onClick={() => setIsOpen(false)} >Edit</button>
-                  <button type="button" onClick={() => setIsOpen(false)} >Close</button>
-                </Footer>
-              </Content>
-            </Dialog>
-          </Main>
-          <Backdrop />
-        </>
-      }
-    </>
-    
+      <Main id={`modal-1`} role="dialog" style={{display: 'block'}}>
+        <Dialog>
+          <Content ref={modalContentRef}>
+            <Header>
+              <Title>Title</Title>
+              <button type="button" onClick={props.handleClose} >&times;</button>
+            </Header>
+            <Body>
+              {props.children}
+            </Body>
+            <Footer>
+              <button type="button" onClick={props.handleClose} >Edit</button>
+              <button type="button" onClick={props.handleClose} >Close</button>
+            </Footer>
+          </Content>
+        </Dialog>
+      </Main>
+      <Backdrop />
+    </>    
   );
 }
 
