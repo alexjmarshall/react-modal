@@ -57,6 +57,55 @@ const Modal = (props) => {
     };
   },[props])
 
+  useEffect(() => {
+    // const addRef = c => {
+    //   Array.isArray(c) && c.forEach(c => {
+    //     c.ref && refs.push(c.ref);
+    //     if(c.props.children)
+    //       addRef(c.props.children);
+    //   })
+    // }
+    // let refs = [];
+    // addRef(props.children)
+    // console.log(refs[1].current)
+    // refs[1].current.focus();
+    let focusable = modalContentRef.current.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    let firstFocusable = focusable[0];
+    let lastFocusable = focusable[focusable.length - 1];
+    firstFocusable.focus();
+    focusable.forEach(elm => {
+      elm.addEventListener('keydown', e => {
+        if(e.key === 'Escape') {
+          props.handleClose();
+        }
+      })
+    })
+    lastFocusable.addEventListener('keydown', e => {
+      if(!e.shiftKey && e.key === 'Tab') {
+        firstFocusable.focus();
+        console.log(document.activeElement)
+        e.preventDefault();
+      }
+        
+    });
+    firstFocusable.addEventListener('keydown', e => {
+      if(e.shiftKey && e.key === 'Tab') {
+        lastFocusable.focus();
+        e.preventDefault();
+      }
+        
+    });
+    return () => {
+      // lastFocusable.removeEventListener('keydown', e => {
+      //   if(e.key === 'Tab') {
+      //     console.log(firstFocusable);
+      //     firstFocusable.focus();
+      //   }
+          
+      // });
+    };
+  })
+
   return (
     <>
       <Main id={`modal-1`} role='dialog' aria-modal='true' aria-labelledby={props.title} aria-describedby={props.desc} style={{display: 'block'}}>
