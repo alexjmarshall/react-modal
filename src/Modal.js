@@ -43,66 +43,60 @@ const Content = styled.div`
 
 const Modal = (props) => {
   const modalContentRef = useRef();
+  const {isOpen, handleClose} = props;
 
+  //close modal by clicking outside it
   useEffect(() => {
     const handleClick = e => {
       if (!(modalContentRef.current?.contains(e.target)))
-        props.handleClose();
+        handleClose();
     }
-    if(props.isOpen) {
+    if(isOpen) {
       window.addEventListener("click", handleClick);
     }
     return () => {
       window.removeEventListener("click", handleClick);
     };
-  },[props])
+  },[])
 
+  //trap focus in modal and press escape to close
   useEffect(() => {
-    // const addRef = c => {
-    //   Array.isArray(c) && c.forEach(c => {
-    //     c.ref && refs.push(c.ref);
-    //     if(c.props.children)
-    //       addRef(c.props.children);
-    //   })
-    // }
-    // let refs = [];
-    // addRef(props.children)
-    // console.log(refs[1].current)
-    // refs[1].current.focus();
     let focusable = modalContentRef.current.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
     let firstFocusable = focusable[0];
     let lastFocusable = focusable[focusable.length - 1];
     firstFocusable.focus();
+
+    const closeOnEscape = e => {
+      if(e.key === 'Escape')
+        handleClose();
+    };
     focusable.forEach(elm => {
-      elm.addEventListener('keydown', e => {
-        if(e.key === 'Escape') {
-          props.handleClose();
-        }
-      })
+      elm.addEventListener('keydown', closeOnEscape)
     })
-    lastFocusable.addEventListener('keydown', e => {
+
+    const handleTab = e => {
       if(!e.shiftKey && e.key === 'Tab') {
         firstFocusable.focus();
         console.log(document.activeElement)
         e.preventDefault();
       }
-        
-    });
-    firstFocusable.addEventListener('keydown', e => {
+    };
+    lastFocusable.addEventListener('keydown', handleTab);
+
+    const handleShiftTab = e => {
       if(e.shiftKey && e.key === 'Tab') {
         lastFocusable.focus();
         e.preventDefault();
       }
-        
-    });
+    };
+    firstFocusable.addEventListener('keydown', handleShiftTab);
+
     return () => {
-      // lastFocusable.removeEventListener('keydown', e => {
-      //   if(e.key === 'Tab') {
-      //     console.log(firstFocusable);
-      //     firstFocusable.focus();
-      //   }
-          
-      // });
+      focusable.forEach(elm => {
+        elm.removeEventListener('keydown', closeOnEscape)
+      });
+      lastFocusable.removeEventListener('keydown', handleTab);
+      firstFocusable.removeEventListener('keydown', handleShiftTab);
     };
   },[])
 
