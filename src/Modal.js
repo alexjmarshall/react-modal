@@ -102,7 +102,7 @@ const Modal = (props) => {
 
   return (
     <>
-      <Main id={`modal-1`} role='dialog' aria-modal='true' aria-labelledby={props.title} aria-describedby={props.desc} style={{display: 'block'}}>
+      <Main id={`modal-1`} role='dialog' aria-modal='true' aria-labelledby={props.titleId} aria-describedby={props.desc} style={{display: 'block'}}>
         <Content ref={modalContentRef}>
           {props.children}
         </Content>
