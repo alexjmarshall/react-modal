@@ -21,12 +21,13 @@ function App() {
     <>
       <button type="button" onClick={() => setIsOpen(true)}>Open Modal</button>
       {isOpen &&
-        <Modal isOpen={isOpen} titleId='modalTitle' handleClose={onClose}>
+        <Modal isOpen={isOpen} titleId='modalTitle' descId='modalDesc' handleClose={onClose}>
           <ModalHeader handleClose={onClose}>
             <Title id='modalTitle' className='title'>Modal Title</Title>
             <button type="button" onClick={onClose}>&times;</button>
           </ModalHeader>
           <ModalBody>
+            <p id='modalDesc'>Demo of a Modal</p>
             <input type="text" onChange={e => setValue(e.target.value)}/>
           </ModalBody>
           <ModalFooter>

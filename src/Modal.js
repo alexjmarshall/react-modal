@@ -77,7 +77,6 @@ const Modal = (props) => {
     const handleTab = e => {
       if(!e.shiftKey && e.key === 'Tab') {
         firstFocusable.focus();
-        console.log(document.activeElement)
         e.preventDefault();
       }
     };
@@ -102,7 +101,12 @@ const Modal = (props) => {
 
   return (
     <>
-      <Main id={`modal-1`} role='dialog' aria-modal='true' aria-labelledby={props.titleId} aria-describedby={props.desc} style={{display: 'block'}}>
+      <Main id={`modal-1`}
+            role='dialog'
+            aria-modal='true'
+            aria-labelledby={props.titleId}
+            aria-describedby={props.descId}
+            style={{display: 'block'}}>
         <Content ref={modalContentRef}>
           {props.children}
         </Content>
