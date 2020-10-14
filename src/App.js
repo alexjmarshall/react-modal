@@ -1,9 +1,6 @@
 import React, {useState} from 'react';
-import Modal from './Modal.js'
-import ModalHeader from './ModalHeader.js'
+import {Modal, ModalHeader, ModalBody, ModalFooter} from './Modal.js'
 import './App.css';
-import ModalBody from './ModalBody.js';
-import ModalFooter from './ModalFooter.js';
 import styled from 'styled-components';
 
 const Title = styled.h4`
