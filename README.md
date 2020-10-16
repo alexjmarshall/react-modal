@@ -1,5 +1,5 @@
 # react-modal
-Accessible React modal element.
+Accessible React modal component.
 
 Includes WAI-ARIA role, aria-modal, aria-labelledby and aria-describedby attributes for accessibility (a11y).
 
